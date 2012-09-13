@@ -1,0 +1,14 @@
+{
+    "name": "caniuse",
+    "description": "",
+    "version": "0.0.1",
+    "dependencies": {
+        "underscore": "*",
+        "express": "*",
+        "jade": "*",
+        "connect-coffee-script": "*",
+        "mongodb": "*",
+        "stylus": "*",
+        "nib": "*"
+    }
+}
