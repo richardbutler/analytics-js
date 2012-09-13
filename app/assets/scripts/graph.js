@@ -52,29 +52,29 @@
     };
 
     Graph.prototype.display = function(d, i) {
-      if (d.depth) {
-        return null;
-      } else {
+      if (d.support === "n") {
         return "none";
+      } else {
+        return null;
       }
     };
 
     Graph.prototype.color = function(d, i) {
-      if (d.type === "browser") {
-        return this.colorTable((d.children ? d : d.parent).name);
+      if (d.depth === 0) {
+        return "#ffffff";
+      } else if (d.support) {
+        return this.supportColor[d.support];
       } else {
-        return this.supportColor[d.support] || "#ffffff";
+        return this.colorTable((d.children ? d : d.parent).name);
       }
     };
 
     Graph.prototype.update = function(data) {
-      this.data = data;
-      console.log("graph update", this.data);
       return this.vis.data([
         {
-          children: this.data
+          children: data
         }
-      ]).selectAll("path").data(this.partition.nodes).enter().append("path").attr("d", this.arc).attr("fill-rule", "evenodd").style("stroke", "none").style("fill", this.color).append("title").text(function(d, i) {
+      ]).selectAll("path").data(this.partition.nodes).enter().append("path").attr("d", this.arc).attr("display", this.display).attr("fill-rule", "evenodd").style("stroke", "none").style("fill", this.color).append("title").text(function(d, i) {
         return d.name;
       });
     };

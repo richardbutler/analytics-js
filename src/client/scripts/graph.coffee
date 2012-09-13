@@ -41,25 +41,26 @@ class @Graph
   
   display: ( d, i ) =>
   
-    if d.depth then null else "none"
+    if d.support is "n" then "none" else null
     
   color: ( d, i ) =>
   
-    if d.type is "browser"
-      @colorTable ( if d.children then d else d.parent ).name
+    if d.depth is 0
+      "#ffffff"
+    else if d.support
+      @supportColor[ d.support ]
     else
-      @supportColor[ d.support ] || "#ffffff"
+      @colorTable ( if d.children then d else d.parent ).name
     
-  update: ( @data ) =>
+  update: ( data ) =>
   
-    console.log "graph update", @data
-  
-    @vis.data( [ children: @data ] )
+    @vis.data( [ children: data ] )
       .selectAll( "path" )
       .data( @partition.nodes )
       .enter()
         .append( "path" )
           .attr( "d", @arc )
+          .attr( "display", @display )
           .attr( "fill-rule", "evenodd" )
           #.style( "stroke", "#fff" )
           .style( "stroke", "none" )

@@ -14,6 +14,7 @@ runBootstrap = ( profiles ) ->
     # Show as tree structure by version breakdown
     # Green block: supported, Red block, unsupported
     
+    highlight = "video"
     graphData = []
     browsers = {}
     
@@ -30,13 +31,18 @@ runBootstrap = ( profiles ) ->
           usageLocal: 0
           usageGlobal: 0
       
-      browsers[ browser ].usageLocal += profile.usageLocal
-      browsers[ browser ].usageGlobal += profile.usageGlobal
-      browsers[ browser ].children.push
-        name: "#{ browserName } #{ profile.stat.versionRef }"
+      item = name: "#{ browserName } #{ profile.stat.versionRef }"
         type: "browser"
         profile: profile
-        children: profile.stat.features
+        
+      if highlight
+        item.support = _( profile.stat.features ).select( ( feature ) -> feature.key is highlight )[ 0 ].support
+      else
+        item.children = profile.stat.features
+      
+      browsers[ browser ].usageLocal += profile.usageLocal
+      browsers[ browser ].usageGlobal += profile.usageGlobal
+      browsers[ browser ].children.push item
     
     for browser of browsers
       graphData.push browsers[ browser ]

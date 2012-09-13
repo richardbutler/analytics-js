@@ -37,7 +37,9 @@
           name: "" + browserName + " " + profile.stat.versionRef,
           type: "browser",
           profile: profile,
-          children: profile.stat.features
+          support: _(profile.stat.features).select(function(feature) {
+            return feature.key === "video";
+          })[0].support
         });
       }
       for (browser in browsers) {
