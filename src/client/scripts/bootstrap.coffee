@@ -1,7 +1,7 @@
 class @Bootstrap
 
   run: ( done ) =>
-    async.series [ @getAgents, @getFeatures, @parseData ], ( err, results ) -> done err, results.pop()
+    async.series [ @getAgents, @getFeatures, @getCategories, @parseData ], ( err, results ) -> done err, results.pop()
     
   getAgents: ( done ) =>
     d3.json "/api/agents", ( data ) =>
@@ -11,6 +11,11 @@ class @Bootstrap
   getFeatures: ( done ) =>
     d3.json "/api/data", ( data ) =>
       @features = data
+      done null, data
+
+  getCategories: ( done ) =>
+    d3.json "/api/cats", ( data ) =>
+      @categories = data
       done null, data
   
   toVersionHash: ( agent, version ) =>
@@ -68,4 +73,5 @@ class @Bootstrap
     done null,
       agents: @agents
       features: @features
+      categories: @categories
       stats: output

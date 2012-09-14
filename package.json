@@ -7,7 +7,6 @@
         "express": "*",
         "jade": "*",
         "connect-coffee-script": "*",
-        "mongodb": "*",
         "stylus": "*",
         "nib": "*"
     }

@@ -12,6 +12,8 @@
 
       this.toVersionHash = __bind(this.toVersionHash, this);
 
+      this.getCategories = __bind(this.getCategories, this);
+
       this.getFeatures = __bind(this.getFeatures, this);
 
       this.getAgents = __bind(this.getAgents, this);
@@ -21,7 +23,7 @@
     }
 
     Bootstrap.prototype.run = function(done) {
-      return async.series([this.getAgents, this.getFeatures, this.parseData], function(err, results) {
+      return async.series([this.getAgents, this.getFeatures, this.getCategories, this.parseData], function(err, results) {
         return done(err, results.pop());
       });
     };
@@ -38,6 +40,14 @@
       var _this = this;
       return d3.json("/api/data", function(data) {
         _this.features = data;
+        return done(null, data);
+      });
+    };
+
+    Bootstrap.prototype.getCategories = function(done) {
+      var _this = this;
+      return d3.json("/api/cats", function(data) {
+        _this.categories = data;
         return done(null, data);
       });
     };
@@ -113,6 +123,7 @@
       return done(null, {
         agents: this.agents,
         features: this.features,
+        categories: this.categories,
         stats: output
       });
     };

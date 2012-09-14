@@ -23,22 +23,25 @@
     }
 
     CompatibilityProfiler.prototype.profile = function(profiles) {
-      var feature, featureKey, profile, stats, support, version, _i, _len;
+      var feature, featureKey, item, profile, stats, support, version, _i, _len;
       for (_i = 0, _len = profiles.length; _i < _len; _i++) {
         profile = profiles[_i];
         profile.stat.features = [];
+        profile.stat.featureTable = {};
         for (featureKey in this.features) {
           feature = this.features[featureKey];
           stats = feature.stats[profile.stat.agent.key];
           version = profile.stat.versionRef;
           support = stats[version].split(" ");
-          profile.stat.features.push({
+          item = {
             name: feature.title,
             key: featureKey,
             support: support[0],
             supportValue: CompatibilityProfiler.SUPPORT_VALUE[support[0]],
             profile: profile
-          });
+          };
+          profile.stat.features.push(item);
+          profile.stat.featureTable[featureKey] = item;
         }
         profile.stat.features = profile.stat.features.sort(function(a, b) {
           return b.supportValue - a.supportValue;

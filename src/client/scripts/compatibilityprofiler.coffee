@@ -21,18 +21,23 @@ class @CompatibilityProfiler
     for profile in profiles
     
       profile.stat.features = []
+      profile.stat.featureTable = {}
       
       for featureKey of @features
         feature = @features[ featureKey ]
         stats = feature.stats[ profile.stat.agent.key ]
         version = profile.stat.versionRef
         support = stats[ version ].split( " " )
-        profile.stat.features.push
+        
+        item =
           name: feature.title
           key: featureKey
           support: support[ 0 ]
           supportValue: CompatibilityProfiler.SUPPORT_VALUE[ support[ 0 ] ]
           profile: profile
+        
+        profile.stat.features.push item
+        profile.stat.featureTable[ featureKey ] = item
 
       profile.stat.features = profile.stat.features.sort ( a, b ) -> b.supportValue - a.supportValue
 

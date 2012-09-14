@@ -1,6 +1,7 @@
 express           = require "express"
 coffee            = require "connect-coffee-script"
-mongodb           = require "mongodb"
+stylus            = require "stylus"
+nib               = require "nib"
 fs                = require "fs"
 _                 = require "underscore"
 
@@ -17,6 +18,17 @@ app.configure ->
     src: "src/client"
     dest: "app/assets"
     bare: true
+  
+  app.use stylus.middleware
+    src: "src/client"
+    dest: "app/assets"
+    compile: ( str, path ) ->
+      stylus( str )
+        .set( "filename", path )
+        .set( "warn", true )
+        .set( "compress", false )
+        .use( nib() )
+  
   app.use express.static( "app/assets" )
   app.use app.router
   app.set "view engine", "jade"
