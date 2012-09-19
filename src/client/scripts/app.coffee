@@ -1,5 +1,5 @@
-apiKey = "AIzaSyCDXsAKkCnLZ0TLjrhekouOkyXxE2MkZvw"
-clientId = "196377251290.apps.googleusercontent.com"
+apiKey = "xxxx"
+clientId = "xxxx.apps.googleusercontent.com"
 scopes = "https://www.googleapis.com/auth/analytics.readonly"
 
 runBootstrap = ( profiles ) ->
