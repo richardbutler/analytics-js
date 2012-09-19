@@ -53,5 +53,9 @@ app.get "/", ( req, res ) ->
   
   res.render "index"
 
+app.get "/config", ( req, res ) ->
+  
+  res.sendfile "config/config.json"
+
 app.listen 3000
 console.log "-- App started on localhost:3000"

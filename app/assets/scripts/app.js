@@ -1,9 +1,11 @@
 (function() {
-  var apiKey, client, clientId, runBootstrap, scopes;
+  var client, config, gaLoaded, runBootstrap, scopes;
 
-  apiKey = "AIzaSyCDXsAKkCnLZ0TLjrhekouOkyXxE2MkZvw";
+  config = null;
 
-  clientId = "196377251290.apps.googleusercontent.com";
+  client = null;
+
+  gaLoaded = false;
 
   scopes = "https://www.googleapis.com/auth/analytics.readonly";
 
@@ -113,12 +115,20 @@
     });
   };
 
-  client = new GAClient(apiKey, clientId, scopes);
-
-  client.on(GAClient.RESULT, runBootstrap);
+  d3.json("/config", function(result) {
+    config = result;
+    client = new GAClient(config.ga.apiKey, config.ga.clientId, scopes);
+    client.on(GAClient.RESULT, runBootstrap);
+    if (gaLoaded) {
+      return client.start();
+    }
+  });
 
   this.gaLoadComplete = function() {
-    return client.start();
+    gaLoaded = true;
+    if (client) {
+      return client.start();
+    }
   };
 
 }).call(this);

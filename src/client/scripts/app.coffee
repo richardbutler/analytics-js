@@ -1,8 +1,10 @@
-apiKey = "xxxx"
-clientId = "xxxx.apps.googleusercontent.com"
-scopes = "https://www.googleapis.com/auth/analytics.readonly"
+config    = null
+client    = null
+gaLoaded  = false
+scopes    = "https://www.googleapis.com/auth/analytics.readonly"
 
 runBootstrap = ( profiles ) ->
+
   bootstrap = new Bootstrap()
   bootstrap.run ( err, result ) ->
     
@@ -116,8 +118,13 @@ runBootstrap = ( profiles ) ->
     @graph = new Graph( d3.select( "#canvas" ) )
     @graph.update categories
 
-client = new GAClient apiKey, clientId, scopes
-client.on GAClient.RESULT, runBootstrap
+d3.json "/config", ( result ) ->
+  config = result
+  
+  client = new GAClient config.ga.apiKey, config.ga.clientId, scopes
+  client.on GAClient.RESULT, runBootstrap
+  client.start() if gaLoaded
 
 @gaLoadComplete = ->
-  client.start()
+  gaLoaded = true
+  client.start() if client
